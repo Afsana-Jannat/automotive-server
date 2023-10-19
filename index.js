@@ -30,6 +30,7 @@ async function run() {
     // await client.connect();
 
     const automotiveCollection = client.db('automotiveDB').collection('automotive');
+    const productCollection = client.db('automotiveDB').collection('products');
     const userCollection = client.db('automotiveDB').collection('user');
 
 
@@ -39,18 +40,34 @@ async function run() {
         res.send(result);
     })
 
-    app.get('/automotive/:id', async(req, res) => {
+    //get single brand images
+    app.get('/brand/:name', async(req, res) => {
+        const name = req.params.name;
+        const query = {brand:name}
+        const result = await automotiveCollection.findOne(query);
+        res.send(result);
+    })
+
+    app.get('/automotive/:name', async(req, res) => {
+        const name = req.params.name;
+        const query = {brand:name}
+        const result = await productCollection.find(query).toArray();
+        res.send(result);
+    })
+
+
+    // get single product
+    app.get('/details/:id', async(req, res) => {
         const id = req.params.id;
         const query = {_id: new ObjectId(id)}
-        const result = await automotiveCollection.findOne(query);
+        const result = await productCollection.findOne(query);
         res.send(result);
     })
 
 
     app.post('/automotive', async(req, res) =>{
-        const newAutomotive = req.body;
-        console.log(newAutomotive);
-        const result = await automotiveCollection.insertOne(newAutomotive);
+        const newAutomotive = req.body; 
+        const result = await productCollection.insertOne(newAutomotive);
         res.send(result);
     })
 
@@ -70,7 +87,7 @@ async function run() {
         }
       }
 
-      const result = await automotiveCollection.updateOne(filter, automotive, options)
+      const result = await productCollection.updateOne(filter, automotive, options)
       res.send(result)
     })
 
@@ -123,3 +140,7 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Automotive server is running on port: ${port}`)
 })
+
+
+
+
