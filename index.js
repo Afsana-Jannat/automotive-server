@@ -28,7 +28,7 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-
+// hello
     const automotiveCollection = client.db('automotiveDB').collection('automotive');
     const productCollection = client.db('automotiveDB').collection('products');
     const userCollection = client.db('automotiveDB').collection('user');
